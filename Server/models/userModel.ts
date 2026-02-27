@@ -1,57 +1,83 @@
-const mongoose = require("mongoose")
-const {isEmail} = require("validator")
-const bcrypt = require("bcrypt")
+import mongoose, { Document, Model, Schema } from "mongoose";
+import { isEmail } from "validator";
+import bcrypt from "bcrypt";
 
-const userSchema = new mongoose.Schema(
-    {
-        name: {
-            Type: String,
-            required: true,
-            minlength: 3,
-            maxlength: 55,
-            unique: true,
-            trim: true,
-        },
-
-        email: {
-            Type:String,
-            required: true,
-            validate: [isEmail],
-            lowercase: true,
-            unique: true,
-        },
-
-        password: {
-            Type: String,
-            required: true,
-            max: 1024,
-            minlength: 6
-        },
-
-    },
-
-    {
-        timestamps:true
-    },
-)
-
-userSchema.pre("save", async function(next:any) {
-    const salt = await bcrypt.genSalt()
-    userSchema.password = await bcrypt.hash(userSchema.password, salt)
-    next()
-})
-
-userSchema.static.login = async function(email: string,password: string){
-    const user = await this.findOne({email})
-    if (user) {
-        const auth = await bcrypt.compare(password, user.password)
-        if (auth) {
-            return user
-        }
-        throw Error("Mot de passe incorrect")
-    }
-    throw Error("Adresse mail incorrect")
+export interface IUser extends Document {
+  name: string;
+  email: string;
+  password: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-const UserModel = mongoose.model("user", userSchema)
-module.exports = UserModel
+interface IUserModel extends Model<IUser> {
+  login(email: string, password: string): Promise<IUser>;
+}
+
+const userSchema = new Schema<IUser, IUserModel>(
+  {
+    name: {
+      type: String,
+      required: true,
+      minlength: 3,
+      maxlength: 55,
+      unique: true,
+      trim: true,
+    },
+
+    email: {
+      type: String,
+      required: true,
+      validate: [isEmail, "Email invalide"],
+      lowercase: true,
+      unique: true,
+    },
+
+    password: {
+      type: String,
+      required: true,
+      minlength: 6,
+      maxlength: 1024,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+userSchema.pre("save", async function (next) {
+  const user = this as IUser;
+
+  if (!user.isModified("password")) {
+    return next;
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(user.password, salt);
+
+  next;
+});
+
+userSchema.statics.login = async function (
+  email: string,
+  password: string
+): Promise<IUser> {
+  const user = await this.findOne({ email });
+
+  if (!user) {
+    throw new Error("Adresse mail incorrecte");
+  }
+
+  const auth = await bcrypt.compare(password, user.password);
+
+  if (!auth) {
+    throw new Error("Mot de passe incorrect");
+  }
+
+  return user;
+};
+
+export const User = mongoose.model<IUser, IUserModel>(
+  "User",
+  userSchema
+);
