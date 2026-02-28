@@ -1,8 +1,12 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
-import { User } from "../models/User";
+import { User } from "../models/userModel";
 
 const ObjectId = mongoose.Types.ObjectId;
+
+interface UserParams {
+  id: string;
+}
 
 export const getAllUsers = async (
   req: Request,
@@ -18,7 +22,7 @@ export const getAllUsers = async (
 };
 
 export const getUser = async (
-  req: Request,
+  req: Request<UserParams>,
   res: Response
 ): Promise<void> => {
   const { id } = req.params;
@@ -43,7 +47,7 @@ export const getUser = async (
 };
 
 export const updateUser = async (
-  req: Request,
+  req: Request<UserParams>,
   res: Response
 ): Promise<void> => {
   const { id } = req.params;
@@ -80,7 +84,7 @@ export const updateUser = async (
 
 
 export const deleteUser = async (
-  req: Request,
+  req: Request<UserParams>,
   res: Response
 ): Promise<void> => {
   const { id } = req.params;
