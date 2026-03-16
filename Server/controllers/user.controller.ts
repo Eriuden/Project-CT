@@ -25,7 +25,7 @@ export const getUser = async (
   req: Request<UserParams>,
   res: Response
 ): Promise<void> => {
-  const { id } = req.params;
+  const id = req.params.id as string;
 
   if (!ObjectId.isValid(id)) {
     res.status(400).json({ message: `ID invalide: ${id}` });
@@ -50,7 +50,7 @@ export const updateUser = async (
   req: Request<UserParams>,
   res: Response
 ): Promise<void> => {
-  const { id } = req.params;
+  const id = req.params.id as string;
 
   if (!ObjectId.isValid(id)) {
     res.status(400).json({ message: `ID invalide: ${id}` });
@@ -87,7 +87,7 @@ export const deleteUser = async (
   req: Request<UserParams>,
   res: Response
 ): Promise<void> => {
-  const { id } = req.params;
+  const id = req.params.id as string;
 
   if (!ObjectId.isValid(id)) {
     res.status(400).json({ message: `ID invalide: ${id}` });
