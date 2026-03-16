@@ -5,10 +5,8 @@ require("dotenv").config({path: "./config/.env"})
 require("./config/db")
 const {checkUser, requireAuth  } = require("./middleware/auth.middleware")
 const cors = require("cors")
-const TransactionRoutes = require("./routes/transaction.route")
-const userRoutes = require("./routes/user.route")
-const MonthlySnapshotRoutes = require("./routes/MonthlySnapshot.route")
 const app = express()
+import routes from "./routes/index.route";
 
 app.use(cors({origin: process.env.CLIENT_URL}))
 
@@ -32,9 +30,7 @@ app.get("/jwtid", requireAuth , (res:any) => {
     res.status(200).send(res.locals.user._id)
 })
 
-app.use("/api/user", userRoutes)
-app.use("/api/transaction", TransactionRoutes)
-app.use("/api/monthlySnapshot", MonthlySnapshotRoutes)
+app.use("/api", routes);
 
 app.listen(process.env.PORT, () => {
     console.log(`listening on port ${process.env.PORT}`)
