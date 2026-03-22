@@ -19,6 +19,7 @@ export const GET_ALL_TRANSACTION = "GET_ALL_TRANSACTION"
 export const ADD_TRANSACTION = "ADD_TRANSACTION"
 export const GET_TRANSACTION_ERROR = "GET_TRANSACTION_ERROR"
 export const UPDATE_TRANSACTION = "UPDATE_TRANSACTION"
+export const DELETE_TRANSACTION = "DELETE_TRANSACTION"
 
 export const getTransaction = async (num: number, dispatch: any) => {
   return axios
@@ -68,11 +69,16 @@ export const updateArticle = (
         .catch((err:any)=> window.alert(err))
 }
 
-// DELETE
-export const deleteTransactionAPI = async (
-  id: string
-): Promise<void> => {
-  await axios.delete(`${API_URL}/${id}`, {
-    withCredentials: true,
-  });
-};
+export const deleteArticle = (
+    transactionId: string, type: TransactionType, category: string, amount: Number, date: Date, 
+    recurring: boolean, recurrenceType : RecurrenceType, description: string, dispatch:any) => {
+        return axios ({
+            method:"delete",
+            url:`${process.env.REACT_APP_API_URL}api/transaction/${transactionId}`,
+            data: {type, category, amount, date, 
+            recurring, recurrenceType, description}
+        })
+        .then(()=> {
+            dispatch({type: DELETE_TRANSACTION, payload: {transactionId}})
+        })
+}
