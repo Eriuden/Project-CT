@@ -44,7 +44,7 @@ export const addTransaction = (data: any, dispatch:any) => {
         })
 }
 
-export const updateArticle = (
+export const updateTransaction = (
   transactionId: string,  
   type: TransactionType,
   category: string,
