@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { recalculateMonthlySnapshot } from "../services/snapshot.service";
 import mongoose from "mongoose";
 import { Transaction, ITransaction } from "../models/TransactionModel"
 
@@ -14,7 +15,9 @@ export const createTransaction = async (
 ): Promise<void> => {
   try {
     const transaction = await Transaction.create(req.body);
+    await recalculateMonthlySnapshot(transaction.date)
     res.status(201).json(transaction);
+    
   } catch (error) {
     res.status(400).json({ message: "Erreur création transaction" });
   }
@@ -74,6 +77,7 @@ export const updateTransaction = async (
       { $set: req.body },
       { new: true, runValidators: true }
     );
+    
 
     if (!updatedTransaction) {
       res.status(404).json({ message: "Transaction non trouvée" });
@@ -81,6 +85,7 @@ export const updateTransaction = async (
     }
 
     res.status(200).json(updatedTransaction);
+    await recalculateMonthlySnapshot(updatedTransaction.date)
   } catch {
     res.status(400).json({ message: "Erreur mise à jour" });
   }
@@ -106,6 +111,7 @@ export const deleteTransaction = async (
     }
 
     res.status(200).json({ message: "Transaction supprimée" });
+    await recalculateMonthlySnapshot(deletedTransaction.date)
   } catch {
     res.status(500).json({ message: "Erreur serveur" });
   }
