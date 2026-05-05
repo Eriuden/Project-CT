@@ -21,11 +21,12 @@ export const GET_TRANSACTION_ERROR = "GET_TRANSACTION_ERROR"
 export const UPDATE_TRANSACTION = "UPDATE_TRANSACTION"
 export const DELETE_TRANSACTION = "DELETE_TRANSACTION"
 
-export const getTransaction = async (num: number, dispatch: any) => {
+export const getTransaction = async (id: number, dispatch: any) => {
   return axios
     .get(`${process.env.REACT_APP_API_URL}api/transaction`)
     .then((res:any)=> {
-        dispatch ({type: GET_TRANSACTION, payload: num})
+        const array = id
+        dispatch ({type: GET_TRANSACTION, payload: array})
         dispatch({type:GET_ALL_TRANSACTION, payload: res.data})
     })
     .catch((err:any) => window.alert(err))
