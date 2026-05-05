@@ -7,6 +7,7 @@ const ObjectId = mongoose.Types.ObjectId;
 
 interface IdParam {
   id: string;
+  userId: string
 }
 
 export const createTransaction = async (
@@ -39,7 +40,7 @@ export const getTransaction = async (
   req: Request<IdParam>,
   res: Response
 ): Promise<void> => {
-  const { id } = req.params;
+  const { id, userId } = req.params;
 
   if (!ObjectId.isValid(id)) {
     res.status(400).json({ message: `ID invalide: ${id}` });
@@ -47,7 +48,7 @@ export const getTransaction = async (
   }
 
   try {
-    const transaction = await Transaction.findById(id);
+    const transaction = await Transaction.findById(id, userId);
 
     if (!transaction) {
       res.status(404).json({ message: "Transaction non trouvée" });

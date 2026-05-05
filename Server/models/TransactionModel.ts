@@ -7,8 +7,7 @@ export type RecurrenceType = "monthly" | "yearly" | null;
 
 export interface ITransaction extends Document {
 
-  user: mongoose.Types.ObjectId
-
+  userId: mongoose.Types.ObjectId
   type: TransactionType;
   category: string;
   amount: number;
@@ -25,7 +24,7 @@ const TransactionSchema = new Schema<ITransaction>({
     ref:"User",
     required:true
   },
-  
+
   type: {
     type: String,
     enum: ["income", "expense"],
