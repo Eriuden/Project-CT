@@ -6,8 +6,16 @@ import { isEmpty } from '../components/Utils'
 import { Connexion } from "../components/ConnexionModal"
 
 export const Home = () => {
+
     type appDispatch = () => any 
     const uid = useContext(UidContext)
+    const useAppDispatch = () => useDispatch<appDispatch>()
+    const dispatch = useAppDispatch()
+    setTimeout(() => {
+      const preloader = document.querySelector(".preloader") as HTMLElement
+      preloader.style.display = "none";
+    }, 10000);
+
     return (
         <div>
             {uid ? (
