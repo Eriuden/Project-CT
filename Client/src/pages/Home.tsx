@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from 'react-redux'
 import { UidContext } from "../components/appContext"
 import { useContext } from 'react'
@@ -30,6 +30,8 @@ export const Home = (transaction: transactionProps) => {
       preloader.style.display = "none";
     }, 10000);
 
+    const [showTransaction, setShowTransaction] = useState(false)
+
     const uid = useContext(UidContext)
     const transactions = useSelector((state:any) => state.transactionReducer)
 
@@ -45,23 +47,28 @@ export const Home = (transaction: transactionProps) => {
                       <h2>Veuillez patienter</h2>
                       <span className="loader"></span>
                     </div>
+                    <button onClick={setShowTransaction(!showTransaction)}
                     <AddTransactionForm/>
 
-                    <ul>
-                        {!isEmpty(transaction) &&
-                            transactions.map((transaction:transactionProps) => {
-                                return (
-                                    <>
-                                        <li>{transaction.amount}</li>
-                                        <li>{transaction.type}</li>
-                                        <li>{transaction.category}</li>
-                                        <li>{transaction.date}</li>
-                                        <li>{transaction.recurrrenceType}</li>
-                                        <li>{transaction.description}</li>
-                                    </>                                   
-                                )
-                            })}
-                    </ul>
+                    {showTransaction ? 
+                        <ul>
+                            {!isEmpty(transaction) &&
+                                transactions.map((transaction:transactionProps) => {
+                                    return (
+                                        <>
+                                            <li>{transaction.amount}</li>
+                                            <li>{transaction.type}</li>
+                                            <li>{transaction.category}</li>
+                                            <li>{transaction.date}</li>
+                                            <li>{transaction.recurrrenceType}</li>
+                                            <li>{transaction.description}</li>
+                                        </>                                   
+                                    )
+                                }
+                            )}
+                        </ul>
+                        : "" 
+                    }
                 </>
             ) : (
                 <Connexion/>
