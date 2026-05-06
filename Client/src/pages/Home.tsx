@@ -2,7 +2,8 @@ import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from 'react-redux'
 import { UidContext } from "../components/appContext"
 import { useContext } from 'react'
-import { isEmpty } from '../components/Utils'
+import { isEmpty } from '../Utils'
+import { AddTransactionForm } from "../components/addTransactionForm"
 import { Connexion } from "../components/ConnexionModal"
 import { getTransaction } from "../redux/actions/transaction.actions"
 
@@ -47,8 +48,8 @@ export const Home = (transaction: transactionProps) => {
                       <h2>Veuillez patienter</h2>
                       <span className="loader"></span>
                     </div>
-                    <button onClick={setShowTransaction(!showTransaction)}
-                    <AddTransactionForm/>
+                    <button onClick={ () => setShowTransaction(!showTransaction)}/>
+                    <AddTransactionForm />
 
                     {showTransaction ? 
                         <ul>
@@ -59,7 +60,7 @@ export const Home = (transaction: transactionProps) => {
                                             <li>{transaction.amount}</li>
                                             <li>{transaction.type}</li>
                                             <li>{transaction.category}</li>
-                                            <li>{transaction.date}</li>
+                                            <li>{new Date(transaction.date).toLocaleString()}</li>
                                             <li>{transaction.recurrrenceType}</li>
                                             <li>{transaction.description}</li>
                                         </>                                   
