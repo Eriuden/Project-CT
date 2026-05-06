@@ -65,7 +65,7 @@ export const updateTransaction = async (
   req: Request<IdParam, {}, Partial<ITransaction>>,
   res: Response
 ): Promise<void> => {
-  const { id } = req.params;
+  const { id, userId } = req.params;
 
   if (!ObjectId.isValid(id)) {
     res.status(400).json({ message: `ID invalide: ${id}` });
