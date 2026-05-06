@@ -6,6 +6,7 @@ import { isEmpty } from '../Utils'
 import { AddTransactionForm } from "../components/addTransactionForm"
 import { Connexion } from "../components/ConnexionModal"
 import { getTransaction } from "../redux/actions/transaction.actions"
+import DashboardHome from "../components/dashboard/dashBoardHome"
 
 export type TransactionType = "income" | "expense";
 export type RecurrenceType = "monthly" | "yearly" | null;
@@ -21,7 +22,7 @@ type transactionProps = {
  description?: string
 }
 
-export const Home = (transaction: transactionProps) => {
+export const Home = () => {
 
     type appDispatch = () => any 
     const useAppDispatch = () => useDispatch<appDispatch>()
@@ -32,28 +33,42 @@ export const Home = (transaction: transactionProps) => {
     }, 10000);
 
     const [showTransaction, setShowTransaction] = useState(false)
+    const [showDashBoard, setShowDashboard] = useState(false)
 
     const uid = useContext(UidContext)
     const transactions = useSelector((state:any) => state.transactionReducer)
 
     useEffect(()=> {
-        getTransaction(transaction.transactionId, dispatch)
-    })
+        dispatch(getTransaction)
+    }, [dispatch])
+
+    let balance = 0;
+
+    transactions.forEach((transaction: transactionProps) => {
+        if (transaction.type === "income") {
+            balance += transaction.amount;
+        } else {
+            balance -= transaction.amount;
+        }
+    });
+
 
     return (
         <div>
             {uid ? (
                 <>
-                    <div className="preloader">
-                      <h2>Veuillez patienter</h2>
-                      <span className="loader"></span>
-                    </div>
+                    <section>
+                        <h1>Solde actuel</h1>
+                        <h2>{balance >= 0 ? "+" : "-"}{balance}€</h2>
+                        <p>Votre trésorerie est {balance >= 0 ? "excédentaire" : "déficitaire"}</p>
+                    </section>
                     <button onClick={ () => setShowTransaction(!showTransaction)}/>
+                    <button onClick={ () => setShowDashboard(!showDashBoard)}/>
                     <AddTransactionForm />
 
                     {showTransaction ? 
                         <ul>
-                            {!isEmpty(transaction) &&
+                            {!isEmpty(transactions) &&
                                 transactions.map((transaction:transactionProps) => {
                                     return (
                                         <>
@@ -70,6 +85,8 @@ export const Home = (transaction: transactionProps) => {
                         </ul>
                         : "" 
                     }
+
+                    {showDashBoard ? <DashboardHome/> : ""}
                 </>
             ) : (
                 <Connexion/>
