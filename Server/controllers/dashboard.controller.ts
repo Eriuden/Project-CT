@@ -1,16 +1,13 @@
 import { Request, Response } from "express";
 import { Transaction } from "../models/TransactionModel";
 
-interface IdParam {
-  userId: string
-}
 
 export const getDashboard = async (
-  req: Request<IdParam>,
+  req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const {userId} = req.params;
+    const userId = req.userId;
 
     const now = new Date();
     const year = now.getFullYear();
