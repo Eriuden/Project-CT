@@ -21,7 +21,7 @@ const DashboardHome = () => {
   }, [dispatch]);
 
   if (loading) {
-    return <p>Chargement du dashboard...</p>;
+    return <p>Loading dashboard...</p>;
   }
 
   return (
@@ -38,8 +38,8 @@ const DashboardHome = () => {
 
         <p>
           {netBalance >= 0
-            ? "Excédent ce mois-ci"
-            : "Déficit ce mois-ci"}
+            ? "Résultat excédentaire"
+            : "Résultat déficitaire"}
         </p>
       </section>
 
