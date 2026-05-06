@@ -27,10 +27,6 @@ export const Home = () => {
     type appDispatch = () => any 
     const useAppDispatch = () => useDispatch<appDispatch>()
     const dispatch = useAppDispatch()
-    setTimeout(() => {
-      const preloader = document.querySelector(".preloader") as HTMLElement
-      preloader.style.display = "none";
-    }, 10000);
 
     const [showTransaction, setShowTransaction] = useState(false)
     const [showDashBoard, setShowDashboard] = useState(false)
