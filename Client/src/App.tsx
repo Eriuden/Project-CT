@@ -3,9 +3,8 @@ import axios from 'axios'
 import { Routes, Route } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Home } from './pages/Home'
-import { getUser } from './redux/actions/user.actions'
-import { ResetPassword } from './pages/ResetPassword'
-import UpdatePassword from './pages/UpdatePassword'
+import { getUser } from './redux/actions/user.action'
+import { UpdatePassword } from './pages/UpdatePassword'
 
 import './App.css'
 
@@ -36,7 +35,10 @@ function App() {
 
   return (
     <div>
-
+      <Routes>
+        <Route path={"/"} element={<Home/>}/>
+        <Route path={"/update-password"} element={<UpdatePassword/>}/>
+      </Routes>
     </div>
   )
 }
