@@ -7,6 +7,7 @@ import { getUser } from './redux/actions/user.action'
 import { UpdatePassword } from './pages/UpdatePassword'
 
 import './App.css'
+import { ResetPassword } from './pages/ResetPassword'
 
 function App() {
   type appDispatch = () => any
@@ -38,6 +39,7 @@ function App() {
       <Routes>
         <Route path={"/"} element={<Home/>}/>
         <Route path={"/update-password"} element={<UpdatePassword/>}/>
+        <Route path={"/reset-password"} element={<ResetPassword/>}/>
       </Routes>
     </div>
   )
