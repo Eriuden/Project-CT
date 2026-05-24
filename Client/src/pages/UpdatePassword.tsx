@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import { useNavigate, useParams, Link } from "react-router-dom"
 import { ToastContainer, Toast } from "react-toastify/dist/components"
 
-const UpdatePassword = () => {
+export const UpdatePassword = () => {
     const {id , token} = useParams()
 
     const validUser = useNavigate()
@@ -104,4 +104,4 @@ const UpdatePassword = () => {
     )
 }
 
-export default UpdatePassword
+
